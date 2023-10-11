@@ -86,6 +86,9 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHero::Look);
+
+		// Interacting with object
+		EnhancedInputComponent->BindAction(UseAction, ETriggerEvent::Started, this, &AHero::Use);
 	}
 	else
 	{
@@ -127,4 +130,9 @@ void AHero::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AHero::Use(const FInputActionValue& Value)
+{
+	GLog->Log("On Use");
 }

@@ -44,6 +44,10 @@ class AHero : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Interaction Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* UseAction;
+
 public:
 	AHero();
 	
@@ -55,6 +59,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	/** Called for interaction input */
+	void Use(const FInputActionValue& Value);
 			
 
 protected:
