@@ -21,7 +21,6 @@ UHealthSystem::UHealthSystem()
 void UHealthSystem::BeginPlay()
 {
 	Super::BeginPlay();
-
 	
 	AActor* Owner = GetOwner();
 	if(Owner)
@@ -34,6 +33,7 @@ void UHealthSystem::BeginPlay()
 void UHealthSystem::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
+	
 	if(Damage <= 0)
 	{
 		return;
@@ -41,6 +41,7 @@ void UHealthSystem::TakeDamage(AActor* DamagedActor, float Damage, const UDamage
 
 	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
 
+	
 	if(Health <= 0)
 	{
 		die();
