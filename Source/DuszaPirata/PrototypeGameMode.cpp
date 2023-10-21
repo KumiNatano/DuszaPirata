@@ -15,4 +15,14 @@ APrototypeGameMode::APrototypeGameMode() : Super()
 	{
 		GLog->Log("GameMode: Could not find hero class!");
 	}
+
+	static ConstructorHelpers::FClassFinder <APlayerController> controllerFinder(TEXT("Blueprint'/Game/Blueprints/BP_HeroController.BP_HeroController_C'"));
+	if (controllerFinder.Succeeded())
+	{
+		PlayerControllerClass = controllerFinder.Class;
+	}
+	else
+	{
+		GLog->Log("GameMode: Could not find hero controller class!");
+	}
 }
