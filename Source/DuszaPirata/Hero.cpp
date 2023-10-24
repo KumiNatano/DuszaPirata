@@ -89,6 +89,12 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 		// Interacting with object
 		EnhancedInputComponent->BindAction(UseAction, ETriggerEvent::Started, this, &AHero::Use);
+
+		// Kicking
+		EnhancedInputComponent->BindAction(KickAction, ETriggerEvent::Started, this, &AHero::Kick);
+
+		// Basic saber attack
+		EnhancedInputComponent->BindAction(AttackBasicAction, ETriggerEvent::Started, this, &AHero::AttackBasic);
 	}
 	else
 	{
@@ -135,4 +141,18 @@ void AHero::Look(const FInputActionValue& Value)
 void AHero::Use(const FInputActionValue& Value)
 {
 	GLog->Log("On Use");
+}
+
+void AHero::Kick(const FInputActionValue& Value)
+{
+	GLog->Log("I will kick you");
+	//UE_LOG(LogTemp, Warning, TEXT("I will kick you!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I will kick you"));
+}
+
+void AHero::AttackBasic(const FInputActionValue& Value)
+{
+	GLog->Log("You swing that like a flail");
+	//UE_LOG(LogTemp, Warning, TEXT("You swing that like a flail."));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("You swing that like a flail"));
 }
