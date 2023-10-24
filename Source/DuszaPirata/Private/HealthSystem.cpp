@@ -25,7 +25,7 @@ void UHealthSystem::BeginPlay()
 	AActor* Owner = GetOwner();
 	if(Owner)
 	{
-		Owner->OnTakeAnyDamage.AddDynamic(this, &UHealthSystem::TakeDamage);
+		//Owner->OnTakeAnyDamage.AddDynamic(this, &UHealthSystem::TakeDamage);
 	}
 	
 }
@@ -46,6 +46,16 @@ void UHealthSystem::TakeDamage(AActor* DamagedActor, float Damage, const UDamage
 	{
 		die();
 	}
+
+	if(AActor* Owner = GetOwner())
+	{
+		UFunction* DamageTakenFunction = Owner->FindFunction(FName("RefreshHPBar"));
+		if(DamageTakenFunction)
+		{
+			Owner->ProcessEvent(DamageTakenFunction, nullptr);
+		}
+	}
+	
 }
 
 void UHealthSystem::die()
