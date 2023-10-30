@@ -15,6 +15,9 @@ UAttackSystem::UAttackSystem()
 
 	DefaultDamage = 50;
 	Damage = DefaultDamage;
+
+	DefaultStrength = 2;
+	Strength = DefaultStrength;
 }
 
 
@@ -29,6 +32,11 @@ void UAttackSystem::BeginPlay()
 
 void UAttackSystem::DealDamage(AActor* DamagedActor, const class UDamageType* DamageType,
 	class AController* InstigatedBy, AActor* DamageCauser)
+{
+	
+}
+
+void UAttackSystem::Kicking()
 {
 	
 }
