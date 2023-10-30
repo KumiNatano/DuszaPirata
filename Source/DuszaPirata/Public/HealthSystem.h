@@ -16,6 +16,9 @@ class DUSZAPIRATA_API UHealthSystem : public UActorComponent
 	
 public:
 	FOnDeathSignature OnDeath;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsDead;
 
 	UHealthSystem();
 
@@ -32,7 +35,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHealth;
-	
-	UFUNCTION()
-	void die();
 };

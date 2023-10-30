@@ -1,4 +1,6 @@
 #include "Barrel.h"
+
+#include "ExplosionComponent.h"
 #include "HealthSystem.h"
 
 
@@ -31,6 +33,10 @@ void ABarrel::Tick(float DeltaTime)
 
 void ABarrel::HandleDeath()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("smierc beczki to tragedia"));
+	UExplosionComponent* ExplosionComponent = this->FindComponentByClass<UExplosionComponent>();
+	if (ExplosionComponent)
+	{
+		ExplosionComponent->TriggerExplosion();
+	}
 }
 
