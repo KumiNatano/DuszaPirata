@@ -22,6 +22,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KickStrength")
+	float DefaultStrength;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Strength;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -30,4 +36,7 @@ public:
 	
 	UFUNCTION()
 	void DealDamage(AActor* DamagedActor, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UFUNCTION()
+	void Kicking();
 };
