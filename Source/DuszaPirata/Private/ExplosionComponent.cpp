@@ -3,6 +3,8 @@
 
 #include "ExplosionComponent.h"
 
+#include "HealthSystem.h"
+
 // Sets default values for this component's properties
 UExplosionComponent::UExplosionComponent()
 {
@@ -28,18 +30,53 @@ void UExplosionComponent::TriggerExplosion()
 {
 	DealDamageInRadius();
 	SpawnExplosionEffects();
-
-	// Opcjonalnie: zniszcz właściciela komponentu
-	// GetOwner()->Destroy();
 }
 
 void UExplosionComponent::DealDamageInRadius()
 {
+	TArray<AActor*> OverlappedActors;
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_Pawn));
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_PhysicsBody));
+
+	UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(), 
+		GetOwner()->GetActorLocation(), 
+		ExplosionRadius, 
+		ObjectTypes, 
+		nullptr,
+		OverlappedActors,
+		OverlappedActors
+	);
+
+	DrawDebugSphere(GetWorld(), GetOwner()->GetActorLocation(), ExplosionRadius, 24, FColor::Red, false, 2);
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Znaleziono %d aktorów"), OverlappedActors.Num()));
+	
+	for (AActor* Actor : OverlappedActors)
+	{
+		if (Actor->ActorHasTag(FName("isDamagedByExplosion")))
+		{
+		
+			UHealthSystem* HealthComponent = Actor->FindComponentByClass<UHealthSystem>();
+			if (HealthComponent)
+			{
+				AActor* DamagedActor = Actor;
+				const UDamageType* DamageType = nullptr;
+				AController* InstigatedBy = nullptr;
+				AActor* DamageCauser = GetOwner();
+				HealthComponent->TakeDamage(DamagedActor, DamageAmount, DamageType, InstigatedBy, DamageCauser);
+			}
+		}
+	}
 }
 
 void UExplosionComponent::SpawnExplosionEffects()
 {
-	// Użyj funkcji UGameplayStatics::SpawnEmitterAtLocation() do wygenerowania efektów cząsteczkowych wybuchu
+	if (MyNiagaraEffect)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), MyNiagaraEffect, GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation(), FVector(1.0f), true, true, ENCPoolMethod::AutoRelease);
+	}
 }
 

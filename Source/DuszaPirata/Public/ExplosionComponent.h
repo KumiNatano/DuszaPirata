@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "ExplosionComponent.generated.h"
 
 
@@ -25,12 +28,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Explosion")
 	void TriggerExplosion();
 
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UNiagaraSystem* MyNiagaraEffect;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
 	float CountdownDuration = 3.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
-	float ExplosionRadius = 500.0f;
+	float ExplosionRadius = 1000.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
 	float DamageAmount = 50.0f;

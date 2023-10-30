@@ -13,6 +13,7 @@ UHealthSystem::UHealthSystem()
 	DefaultHealth = 100;
 	Health = DefaultHealth;
 	MaxHealth = 100;
+	bIsDead = false;
 
 }
 
@@ -33,33 +34,33 @@ void UHealthSystem::BeginPlay()
 void UHealthSystem::TakeDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
-	
-	if(Damage <= 0)
-	{
-		return;
-	}
 
-	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
-
-	
-	if(Health <= 0)
+	if(bIsDead == false)
 	{
-		OnDeath.Broadcast();
-	}
-
-	if(AActor* Owner = GetOwner())
-	{
-		UFunction* DamageTakenFunction = Owner->FindFunction(FName("RefreshHPBar"));
-		if(DamageTakenFunction)
+		if(Damage <= 0)
 		{
-			Owner->ProcessEvent(DamageTakenFunction, nullptr);
+			return;
+		}
+		
+		Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
+		
+		
+		if(Health <= 0)
+		{
+			bIsDead = true;
+			OnDeath.Broadcast();
+		}
+		
+		if(AActor* Owner = GetOwner())
+		{
+			UFunction* DamageTakenFunction = Owner->FindFunction(FName("RefreshHPBar"));
+			if(DamageTakenFunction)
+			{
+				Owner->ProcessEvent(DamageTakenFunction, nullptr);
+			}
 		}
 	}
 	
-}
 
-void UHealthSystem::die()
-{	
-	GetOwner()->Destroy();	
 }
 
