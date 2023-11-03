@@ -32,13 +32,13 @@ public:
 	UNiagaraSystem* MyNiagaraEffect;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	UPROPERTY(EditAnywhere, Category = "Explosion")
 	float CountdownDuration = 3.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	UPROPERTY(EditAnywhere, Category = "Explosion")
 	float ExplosionRadius = 1000.0f;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Explosion")
+	UPROPERTY(EditAnywhere, Category = "Explosion")
 	float DamageAmount = 50.0f;
 
 	UFUNCTION()
@@ -46,6 +46,4 @@ private:
 
 	UFUNCTION()
 	void SpawnExplosionEffects();
-
-		
 };
