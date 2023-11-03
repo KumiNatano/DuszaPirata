@@ -50,7 +50,7 @@ void UExplosionComponent::DealDamageInRadius()
 		OverlappedActors
 	);
 
-	DrawDebugSphere(GetWorld(), GetOwner()->GetActorLocation(), ExplosionRadius, 24, FColor::Red, false, 2);
+	//DrawDebugSphere(GetWorld(), GetOwner()->GetActorLocation(), ExplosionRadius, 24, FColor::Red, false, 2);
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, FString::Printf(TEXT("Znaleziono %d aktorów"), OverlappedActors.Num()));
 	

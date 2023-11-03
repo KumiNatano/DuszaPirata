@@ -37,6 +37,7 @@ void ABarrel::HandleDeath()
 	if (ExplosionComponent)
 	{
 		ExplosionComponent->TriggerExplosion();
+		Destroy();
 	}
 }
 
