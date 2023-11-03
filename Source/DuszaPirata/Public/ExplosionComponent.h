@@ -1,0 +1,49 @@
+
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "ExplosionComponent.generated.h"
+
+
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+class DUSZAPIRATA_API UExplosionComponent : public UActorComponent
+{
+	GENERATED_BODY()
+
+public:	
+	UExplosionComponent();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:	
+	UFUNCTION(BlueprintCallable, Category = "Explosion")
+	void StartCountdown();
+
+	UFUNCTION(BlueprintCallable, Category = "Explosion")
+	void TriggerExplosion();
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UNiagaraSystem* MyNiagaraEffect;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Explosion")
+	float CountdownDuration = 3.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Explosion")
+	float ExplosionRadius = 1000.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Explosion")
+	float DamageAmount = 50.0f;
+
+	UFUNCTION()
+	void DealDamageInRadius();
+
+	UFUNCTION()
+	void SpawnExplosionEffects();
+};

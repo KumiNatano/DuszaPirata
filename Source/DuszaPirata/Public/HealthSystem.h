@@ -12,13 +12,19 @@ class DUSZAPIRATA_API UHealthSystem : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
+	
+public:
+	FOnDeathSignature OnDeath;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsDead;
+
 	UHealthSystem();
 
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
-	// Called when the game starts
+
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Health")
@@ -29,7 +35,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHealth;
-	
-	UFUNCTION()
-	void die();
 };
