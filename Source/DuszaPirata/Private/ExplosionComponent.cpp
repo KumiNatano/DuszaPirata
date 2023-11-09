@@ -29,7 +29,7 @@ void UExplosionComponent::StartCountdown()
 void UExplosionComponent::TriggerExplosion()
 {
 	DealDamageInRadius();
-	SpawnExplosionEffects();
+	SpawnFireArea();
 }
 
 void UExplosionComponent::DealDamageInRadius()
@@ -72,11 +72,11 @@ void UExplosionComponent::DealDamageInRadius()
 	}
 }
 
-void UExplosionComponent::SpawnExplosionEffects()
+void UExplosionComponent::SpawnFireArea()
 {
-	if (MyNiagaraEffect)
+	if(FireAreaBlueprint)
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), MyNiagaraEffect, GetOwner()->GetActorLocation(), GetOwner()->GetActorRotation(), FVector(1.0f), true, true, ENCPoolMethod::AutoRelease);
+		GetWorld()->SpawnActor<AActor>(FireAreaBlueprint, GetOwner()->GetActorLocation(), FRotator(0,0,0));
 	}
 }
 
