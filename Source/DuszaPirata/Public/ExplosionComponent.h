@@ -28,8 +28,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Explosion")
 	void TriggerExplosion();
 
-	UPROPERTY(EditAnywhere, Category = "Effects")
-	UNiagaraSystem* MyNiagaraEffect;
+	UPROPERTY(EditAnywhere, Category = "Fire")
+	TSubclassOf<AActor> FireAreaBlueprint;
+
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Explosion")
@@ -45,5 +46,5 @@ private:
 	void DealDamageInRadius();
 
 	UFUNCTION()
-	void SpawnExplosionEffects();
+	void SpawnFireArea();
 };
