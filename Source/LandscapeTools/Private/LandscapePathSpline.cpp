@@ -19,11 +19,10 @@ ALandscapePathSpline::ALandscapePathSpline()
 	RootComponent = Spline;
 }
 
-#if WITH_EDITOR
 void ALandscapePathSpline::OnConstruction(const FTransform& Transform)
 {
+#if WITH_EDITOR
 	Super::OnConstruction(Transform);
-
 	if (!GEditor) { return; }
 	FViewport* Viewport = GEditor->GetActiveViewport();
 	if (!Viewport) { return; }
@@ -66,24 +65,27 @@ void ALandscapePathSpline::OnConstruction(const FTransform& Transform)
 	Spline->UpdateSpline();
 
 	const int32 End = Spline->GetNumberOfSplinePoints() - 1;
-
+	
 	for (int32 i = 0; i < End; ++i)
 	{
 		USplineMeshComponent* SplineMesh
 			= NewObject<USplineMeshComponent>(this, FName(FString::Printf(TEXT("Mesh%d"), i)));
 		SplineMesh->RegisterComponent();
-
+		
+		SplineMesh->SetStaticMesh(Mesh);
+		SplineMesh->SetMaterial(0, Material);
+		SplineMeshes.Add(SplineMesh);
+		SplineMesh->RuntimeVirtualTextures.Add(RuntimeVirtualTexture);
+		SplineMesh->SetCustomPrimitiveDataFloat(0, 0.0f);
+		
 		SplineMesh->SetStartPosition(Spline->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World), false);
 		SplineMesh->SetEndPosition(Spline->GetLocationAtSplinePoint(i + 1, ESplineCoordinateSpace::World), false);
 		SplineMesh->SetStartTangent(Spline->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::World), false);
 		SplineMesh->SetEndTangent(Spline->GetTangentAtSplinePoint(i + 1, ESplineCoordinateSpace::World), false);
 		SplineMesh->SetStartScale(FVector2d(Spline->GetScaleAtSplinePoint(i)), false);
 		SplineMesh->SetEndScale(FVector2d(Spline->GetScaleAtSplinePoint(i + 1)), true);
-
-		SplineMesh->SetMaterial(0, Material);
-		SplineMesh->SetStaticMesh(Mesh);
-		SplineMeshes.Add(SplineMesh);
-		SplineMesh->RuntimeVirtualTextures.Add(RuntimeVirtualTexture);
 	}
+	SplineMeshes[0]->SetDefaultCustomPrimitiveDataFloat(0, 1.0f);
+    SplineMeshes.Last()->SetDefaultCustomPrimitiveDataFloat(0, -1.0f);
 }
 #endif
