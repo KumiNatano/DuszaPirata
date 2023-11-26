@@ -22,11 +22,7 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+	void DeleteFireAreaParticles();
 	void DeleteFireArea();
 	FTimerHandle MemberTimerHandle;
-
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
-		
 };

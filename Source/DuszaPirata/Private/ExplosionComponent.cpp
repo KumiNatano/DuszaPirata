@@ -30,6 +30,7 @@ void UExplosionComponent::TriggerExplosion()
 {
 	DealDamageInRadius();
 	SpawnFireArea();
+	OnExplosionBP.Broadcast();
 }
 
 void UExplosionComponent::DealDamageInRadius()
