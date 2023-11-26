@@ -14,9 +14,12 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DUSZAPIRATA_API UExplosionComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExplosionSignature);
 public:	
 	UExplosionComponent();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnExplosionSignature OnExplosionBP;
 
 protected:
 	virtual void BeginPlay() override;
