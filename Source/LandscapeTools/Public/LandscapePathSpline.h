@@ -29,9 +29,9 @@ private:
 	URuntimeVirtualTexture* RuntimeVirtualTexture;
 	UPROPERTY()
 	TArray<USplineMeshComponent*> SplineMeshes;
+
 #if WITH_EDITOR
 protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 #endif
-	
 };
