@@ -19,9 +19,9 @@ ALandscapePathSpline::ALandscapePathSpline()
 	RootComponent = Spline;
 }
 
+#if WITH_EDITOR
 void ALandscapePathSpline::OnConstruction(const FTransform& Transform)
 {
-#if WITH_EDITOR
 	Super::OnConstruction(Transform);
 	if (!GEditor) { return; }
 	FViewport* Viewport = GEditor->GetActiveViewport();
