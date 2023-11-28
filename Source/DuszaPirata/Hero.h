@@ -15,6 +15,8 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHeroDeathBPDelegate);
+
 UCLASS(config=Game)
 class AHero : public ACharacter
 {
@@ -50,6 +52,8 @@ class AHero : public ACharacter
 
 public:
 	AHero();
+	virtual void Jump() override;
+	virtual void StopJumping() override;
 	
 
 protected:
@@ -62,6 +66,8 @@ protected:
 
 	/** Called for interaction input */
 	void Use(const FInputActionValue& Value);
+
+	bool bIsDead = false;
 			
 
 protected:
@@ -76,5 +82,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	UFUNCTION()
+	void OnHeroDeath();
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnHeroDeathBPDelegate OnHeroDeathBP;
 };
 

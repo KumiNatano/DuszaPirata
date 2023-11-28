@@ -14,9 +14,12 @@ UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DUSZAPIRATA_API UExplosionComponent : public UActorComponent
 {
 	GENERATED_BODY()
-
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnExplosionSignature);
 public:	
 	UExplosionComponent();
+
+	UPROPERTY(BlueprintAssignable)
+	FOnExplosionSignature OnExplosionBP;
 
 protected:
 	virtual void BeginPlay() override;
@@ -28,8 +31,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Explosion")
 	void TriggerExplosion();
 
-	UPROPERTY(EditAnywhere, Category = "Effects")
-	UNiagaraSystem* MyNiagaraEffect;
+	UPROPERTY(EditAnywhere, Category = "Fire")
+	TSubclassOf<AActor> FireAreaBlueprint;
+
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Explosion")
@@ -45,5 +49,5 @@ private:
 	void DealDamageInRadius();
 
 	UFUNCTION()
-	void SpawnExplosionEffects();
+	void SpawnFireArea();
 };
