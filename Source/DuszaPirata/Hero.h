@@ -50,6 +50,14 @@ class AHero : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* UseAction;
 
+	/** Kick Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* KickAction;
+
+	/** Basic Saber Attack Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AttackBasicAction;
+
 public:
 	AHero();
 	virtual void Jump() override;
@@ -67,8 +75,14 @@ protected:
 	/** Called for interaction input */
 	void Use(const FInputActionValue& Value);
 
+
 	bool bIsDead = false;
-			
+		
+	/** Called for kick input */
+	void Kick(const FInputActionValue& Value);
+
+	/** Called for basic saber attack input */
+	void AttackBasic(const FInputActionValue& Value);
 
 protected:
 	// APawn interface
