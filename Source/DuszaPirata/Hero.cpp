@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "HealthSystem.h"
 #include "InputActionValue.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -67,6 +68,18 @@ void AHero::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	UHealthSystem* HealthSystem = FindComponentByClass<UHealthSystem>();
+	if(HealthSystem)
+	{
+		HealthSystem->OnDeath.AddDynamic(this, &AHero::OnHeroDeath);
+	}
+}
+
+void AHero::OnHeroDeath()
+{
+	OnHeroDeathBP.Broadcast();
+	bIsDead = true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,8 +91,8 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AHero::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AHero::StopJumping);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHero::Move);
@@ -96,12 +109,28 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	}
 }
 
+void AHero::Jump()
+{
+	if (!bIsDead)
+	{
+		Super::Jump();
+	}
+}
+
+void AHero::StopJumping()
+{
+	if (!bIsDead)
+	{
+		Super::StopJumping();
+	}
+}
+
 void AHero::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && bIsDead == false)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -124,7 +153,7 @@ void AHero::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && bIsDead == false)
 	{
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
