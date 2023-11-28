@@ -2,7 +2,8 @@
 
 
 #include "ExplosionComponent.h"
-
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 #include "HealthSystem.h"
 
 // Sets default values for this component's properties
@@ -29,6 +30,7 @@ void UExplosionComponent::StartCountdown()
 void UExplosionComponent::TriggerExplosion()
 {
 	DealDamageInRadius();
+	SpawnExplosionEffects();
 	SpawnFireArea();
 	OnExplosionBP.Broadcast();
 }
@@ -78,6 +80,25 @@ void UExplosionComponent::SpawnFireArea()
 	if(FireAreaBlueprint)
 	{
 		GetWorld()->SpawnActor<AActor>(FireAreaBlueprint, GetOwner()->GetActorLocation(), FRotator(0,0,0));
+	}
+}
+
+void UExplosionComponent::SpawnExplosionEffects()
+{
+	for(UNiagaraSystem* effect : explosionEffects)
+	{
+		if(effect)
+		{
+			FVector SpawnLocation = GetOwner()->GetActorLocation();
+			FRotator SpawnRotation = GetOwner()->GetActorRotation();
+			
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+				GetWorld(),
+				effect,
+				SpawnLocation,
+				SpawnRotation 
+			);
+		}
 	}
 }
 
