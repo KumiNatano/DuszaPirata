@@ -3,7 +3,10 @@
 
 #include "AttackSystem.h"
 
+#include "AsyncDetailViewDiff.h"
+#include "CollisionDebugDrawingPublic.h"
 #include "HealthSystem.h"
+#include "DuszaPirata/EnvProp.h"
 
 
 // Sets default values for this component's properties
@@ -38,6 +41,42 @@ void UAttackSystem::DealDamage(AActor* DamagedActor, const class UDamageType* Da
 
 void UAttackSystem::Kicking()
 {
+	FVector SphereCenter = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * 200;
+	float SphereRadius = 200.0;
+	int SphereSegments = 12;
+	FColor SphereColor = FColor::Red;
+
+	TArray<FOverlapResult> Overlaps;
+	FCollisionQueryParams CollisionParams;
+
+	DrawDebugSphere(GetWorld(), SphereCenter, SphereRadius, SphereSegments, SphereColor, false, 2.0f);
 	
+	bool bHit = GetWorld()->OverlapMultiByObjectType(
+		Overlaps,
+		SphereCenter,
+		FQuat::Identity,
+		FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllObjects),
+		FCollisionShape::MakeSphere(SphereRadius),
+		CollisionParams
+	);
+
+	if (bHit)
+	{
+		for (const FOverlapResult& OverlapResult : Overlaps)
+		{
+			AActor* HitActor = OverlapResult.GetActor();
+			if (USceneComponent* RootComponent = HitActor->GetRootComponent())
+			{
+				UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(RootComponent);
+				if (PrimitiveComponent && PrimitiveComponent->IsSimulatingPhysics())
+				{
+					FVector PlayerForwardVector = GetOwner()->GetActorForwardVector();
+					FVector PlayerUpVector = GetOwner()->GetActorUpVector() * 10.f;
+					float ImpulseStrength = 100000.f;
+					PrimitiveComponent->AddImpulse(PlayerForwardVector * ImpulseStrength + PlayerUpVector);
+				}
+			}
+		}
+	}
 }
 
