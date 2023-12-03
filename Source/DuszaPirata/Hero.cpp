@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Hero.h"
+
+#include "AttackSystem.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -175,6 +177,10 @@ void AHero::Use(const FInputActionValue& Value)
 void AHero::Kick(const FInputActionValue& Value)
 {
 	GLog->Log("I will kick you");
+	if (UAttackSystem* MyComponent = FindComponentByClass<UAttackSystem>())
+	{
+		MyComponent->Kicking();
+	}
 	//UE_LOG(LogTemp, Warning, TEXT("I will kick you!"));
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("I will kick you"));
 }
