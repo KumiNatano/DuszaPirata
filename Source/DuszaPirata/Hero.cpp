@@ -108,6 +108,9 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 		// Basic saber attack
 		EnhancedInputComponent->BindAction(AttackBasicAction, ETriggerEvent::Started, this, &AHero::AttackBasic);
+
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AHero::Shoot);
 	}
 	else
 	{
@@ -184,4 +187,14 @@ void AHero::AttackBasic(const FInputActionValue& Value)
 	GLog->Log("You swing that like a flail");
 	//UE_LOG(LogTemp, Warning, TEXT("You swing that like a flail."));
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("You swing that like a flail"));
+}
+
+void AHero::Shoot(const FInputActionValue& Value)
+{
+	UMusketSystem* MusketSystem = Cast<UMusketSystem>(this->GetComponentByClass(UMusketSystem::StaticClass()));
+
+	if (MusketSystem)
+	{
+		MusketSystem->Shoot();
+	}
 }
