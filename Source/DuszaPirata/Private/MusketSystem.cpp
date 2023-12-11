@@ -47,7 +47,7 @@ bool UMusketSystem::TryPickUpAmmo()
 {
 	if(isLoaded)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Mamy juz pocisk, nie da sie podniesc!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Mamy juz pocisk, nie da sie podniesc!"));
 		return false;
 	}
 	else
@@ -58,7 +58,7 @@ bool UMusketSystem::TryPickUpAmmo()
 		}
 	
 		isLoaded = true;
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Podniesiono pocisk!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Podniesiono pocisk!"));
 		return true;
 	}
 
@@ -70,11 +70,16 @@ void UMusketSystem::Shoot()
 	{
 		isLoaded = false;
 		MusketModel->SetVisibility(false);
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Wystrzelono pocisk!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Wystrzelono pocisk!"));
+		
+		FVector ForwardVector = GetOwner()->GetActorForwardVector();
+		FVector SpawnLocation = GetOwner()->GetActorLocation() + (ForwardVector * distanceFromPlayerForBulletToSpawn); //przemnozone ile dalej od wlasciciela zrespic zeby nie zranic go
+		
+		AStaticMeshActor* Bullet = GetWorld()->SpawnActor<AStaticMeshActor>(BulletBlueprint, SpawnLocation, GetOwner()->GetActorRotation());
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Nie wystrzelono, bo nie ma czego!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Nie wystrzelono, bo nie ma czego!"));
 	}
 }
 
