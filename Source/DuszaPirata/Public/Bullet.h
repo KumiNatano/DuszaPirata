@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "Bullet.generated.h"
 
 
@@ -20,14 +21,16 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float DamageToDeal = 20;
-
-protected:
+	float TimeToDestroy = 5;
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
+	FTimerHandle MemberTimerHandle;
+	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void DestroyBulletObject();
 		
 };
