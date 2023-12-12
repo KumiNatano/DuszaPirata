@@ -19,7 +19,7 @@ UAttackSystem::UAttackSystem()
 	DefaultDamage = 50;
 	Damage = DefaultDamage;
 
-	DefaultStrength = 2;
+	DefaultStrength = 100000;
 	Strength = DefaultStrength;
 }
 
@@ -72,8 +72,7 @@ void UAttackSystem::Kicking()
 				{
 					FVector PlayerForwardVector = GetOwner()->GetActorForwardVector();
 					FVector PlayerUpVector = GetOwner()->GetActorUpVector() * 10.f;
-					float ImpulseStrength = 100000.f;
-					PrimitiveComponent->AddImpulse(PlayerForwardVector * ImpulseStrength + PlayerUpVector);
+					PrimitiveComponent->AddImpulse(PlayerForwardVector * Strength + PlayerUpVector);
 				}
 			}
 		}
