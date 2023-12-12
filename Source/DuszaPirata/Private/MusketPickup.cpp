@@ -72,6 +72,7 @@ void UMusketPickup::SomethingIsOnPickup()
 						if(MusketSystem->TryPickUpAmmo())
 						{
 							GetOwner()->Destroy();
+							return;
 						}
 					}
 				}
@@ -82,4 +83,3 @@ void UMusketPickup::SomethingIsOnPickup()
 		GetOwner()->GetWorldTimerManager().ClearTimer(MemberTimerHandle);	
 		}
 }
-
