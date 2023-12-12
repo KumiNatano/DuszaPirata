@@ -3,12 +3,6 @@
 
 #include "AttackSystem.h"
 
-#include "AsyncDetailViewDiff.h"
-#include "CollisionDebugDrawingPublic.h"
-#include "HealthSystem.h"
-#include "DuszaPirata/EnvProp.h"
-
-
 // Sets default values for this component's properties
 UAttackSystem::UAttackSystem()
 {
