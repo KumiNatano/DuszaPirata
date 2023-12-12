@@ -45,9 +45,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Explosion")
 	float DamageAmount = 50.0f;
 
+	UPROPERTY(EditAnywhere, Category = "Explosion")
+	TArray<UNiagaraSystem*> explosionEffects;
+
 	UFUNCTION()
 	void DealDamageInRadius();
 
 	UFUNCTION()
 	void SpawnFireArea();
+
+	UFUNCTION()
+	void SpawnExplosionEffects();
 };
