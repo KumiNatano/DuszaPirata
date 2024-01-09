@@ -78,7 +78,8 @@ void AHero::BeginPlay()
 	}
 }
 
-void AHero::OnHeroDeath()
+void AHero::OnHeroDeath(AActor* DamagedActor, float Damage,
+		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	OnHeroDeathBP.Broadcast();
 	bIsDead = true;

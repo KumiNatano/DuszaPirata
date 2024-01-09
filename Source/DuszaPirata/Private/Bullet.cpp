@@ -4,6 +4,7 @@
 #include "Bullet.h"
 
 #include "HealthSystem.h"
+#include "GameFramework/Character.h"
 
 // Sets default values for this component's properties
 UBullet::UBullet()
@@ -56,6 +57,23 @@ void UBullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		AController* InstigatedBy = nullptr;
 		AActor* DamageCauser = GetOwner();
 		HealthComponent->TakeDamage(DamagedActor, DamageAmount, DamageType, InstigatedBy, DamageCauser);
+		if(HealthComponent->bIsDead)
+		{
+			ACharacter* Character = Cast<ACharacter>(OtherActor);
+			UPrimitiveComponent* TargetRoot;
+			if(Character)
+			{
+				TargetRoot = Character->GetMesh();
+			}
+			else
+			{
+				TargetRoot = Cast<UPrimitiveComponent>(DamagedActor->GetRootComponent());
+			}
+			if(!TargetRoot) {return;}
+			TargetRoot->AddImpulseAtLocation(DamageCauser ->GetActorForwardVector() * 70000.f,
+				TargetRoot->GetComponentTransform().TransformPosition(DamageCauser->GetActorLocation()));
+			GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("Dzięki, działa"));
+		}
 	}
 
 	DestroyBulletObject();

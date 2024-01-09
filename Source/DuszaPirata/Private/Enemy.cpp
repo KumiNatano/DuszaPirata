@@ -4,6 +4,7 @@
 #include "Enemy.h"
 
 #include "HealthSystem.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -39,7 +40,8 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AEnemy::HandleDeath()
+void AEnemy::HandleDeath(AActor* DamagedActor, float Damage,
+		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	//this->FindComponentByClass<
 	USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>();
@@ -47,11 +49,11 @@ void AEnemy::HandleDeath()
 	{
 		SkeletalMesh->SetSimulatePhysics(true);
 	}
-	//UExplosionComponent* ExplosionComponent = this->FindComponentByClass<UExplosionComponent>();
-	//if (ExplosionComponent)
-	//{
-	//	ExplosionComponent->TriggerExplosion();
-	//	Destroy();
-	//}
+	
+	UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent();
+	if(CapsuleComp)
+	{
+		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 

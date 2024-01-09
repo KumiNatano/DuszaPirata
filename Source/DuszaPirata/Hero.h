@@ -106,7 +106,8 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	UFUNCTION()
-	void OnHeroDeath();
+	void OnHeroDeath(AActor* DamagedActor, float Damage,
+		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnHeroDeathBPDelegate OnHeroDeathBP;

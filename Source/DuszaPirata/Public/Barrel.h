@@ -24,5 +24,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION()
-	void HandleDeath();
+	void HandleDeath(AActor* DamagedActor, float Damage,
+		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 };
