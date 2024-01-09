@@ -48,7 +48,7 @@ void UHealthSystem::TakeDamage(AActor* DamagedActor, float Damage, const UDamage
 		if(Health <= 0)
 		{
 			bIsDead = true;
-			OnDeath.Broadcast();
+			OnDeath.Broadcast(DamagedActor,Damage, DamageType, InstigatedBy, DamageCauser);
 		}
 		
 		if(AActor* Owner = GetOwner())

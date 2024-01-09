@@ -31,7 +31,8 @@ void ABarrel::Tick(float DeltaTime)
 
 }
 
-void ABarrel::HandleDeath()
+void ABarrel::HandleDeath(AActor* DamagedActor, float Damage,
+		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	UExplosionComponent* ExplosionComponent = this->FindComponentByClass<UExplosionComponent>();
 	if (ExplosionComponent)

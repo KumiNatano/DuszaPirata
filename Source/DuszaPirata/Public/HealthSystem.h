@@ -12,7 +12,8 @@ class DUSZAPIRATA_API UHealthSystem : public UActorComponent
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnDeathSignature, AActor*, DamagedActor, float, Damage,
+		const class UDamageType*, DamageType, class AController*, InstigatedBy, AActor*, DamageCauser);
 	
 public:
 	FOnDeathSignature OnDeath;
