@@ -13,6 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "HealthSystem.h"
 #include "InputActionValue.h"
+#include "ItemSlotComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -197,10 +198,10 @@ void AHero::AttackBasic(const FInputActionValue& Value)
 
 void AHero::Shoot(const FInputActionValue& Value)
 {
-	UMusketSystem* MusketSystem = Cast<UMusketSystem>(this->GetComponentByClass(UMusketSystem::StaticClass()));
+	UItemSlotComponent* ItemSlotComponent = Cast<UItemSlotComponent>(this->GetComponentByClass(UItemSlotComponent::StaticClass()));
 
-	if (MusketSystem)
+	if (ItemSlotComponent)
 	{
-		MusketSystem->Shoot();
+		ItemSlotComponent->CheckItemsInArea(200);
 	}
 }
