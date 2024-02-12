@@ -8,7 +8,7 @@
 /**
  * 
  */
-class DUSZAPIRATA_API Musket : public Weapon
+class DUSZAPIRATA_API Musket : public UWeapon
 {
 public:
 	Musket();

@@ -13,6 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "HealthSystem.h"
 #include "InputActionValue.h"
+#include "Item.h"
 #include "ItemSlotComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -114,6 +115,9 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 		// Shooting
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AHero::Shoot);
+
+		// Throwing
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &AHero::Throw);
 	}
 	else
 	{
@@ -202,6 +206,35 @@ void AHero::Shoot(const FInputActionValue& Value)
 
 	if (ItemSlotComponent)
 	{
-		ItemSlotComponent->CheckItemsInArea(200);
+		if(ItemSlotComponent->actuallItem == nullptr)
+		{
+			ItemSlotComponent->CheckItemsInArea(200);
+		}
+		else
+		{
+			UItem* ourItem = Cast<UItem>(ItemSlotComponent->actuallItem->GetComponentByClass(UItem::StaticClass()));
+			ourItem->UseItem();
+		}
+
+	}
+}
+
+void AHero::Throw(const FInputActionValue& Value)
+{
+	UItemSlotComponent* ItemSlotComponent = Cast<UItemSlotComponent>(this->GetComponentByClass(UItemSlotComponent::StaticClass()));
+
+	if (ItemSlotComponent)
+	{
+		if(ItemSlotComponent->actuallItem == nullptr)
+		{
+			
+		}
+		else
+		{
+			UItem* ourItem = Cast<UItem>(ItemSlotComponent->actuallItem->GetComponentByClass(UItem::StaticClass()));
+			ourItem->ThrowItem();
+			ItemSlotComponent->ClearItemSlot();
+		}
+
 	}
 }

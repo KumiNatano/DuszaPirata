@@ -16,6 +16,9 @@ public:
 	// Sets default values for this component's properties
 	UItemPickup();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Setup")
+	TSubclassOf<AActor> PrefabBlueprint;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -13,7 +13,7 @@ Musket::~Musket()
 
 void Musket::UseItem()
 {
-	Weapon::UseItem();
+	UWeapon::UseItem();
 	Musket::Shoot();
 }
 

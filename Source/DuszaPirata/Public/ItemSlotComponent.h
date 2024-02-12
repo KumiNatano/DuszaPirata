@@ -18,10 +18,13 @@ public:
 	UItemSlotComponent();
 
 	int SearchItemsArea;
-	UItemPickup ActuallItemPickup;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	AActor* actuallItem;
 	
 	void CheckItemsInArea(int area);
-	/*void PickupItem(AActor* actor);*/
+	void PickupItem(AActor* actor);
+	void ClearItemSlot();
 
 protected:
 	// Called when the game starts

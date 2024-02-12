@@ -1,23 +1,42 @@
-
-
-
 #include "Weapon.h"
 
-Weapon::Weapon()
+UWeapon::UWeapon()
 {
+
 }
 
-Weapon::~Weapon()
+UWeapon::~UWeapon()
 {
+	
 }
 
-void Weapon::UseItem()
+void UWeapon::BeginPlay()
 {
-	UItem::UseItem();
-	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Item to bron, strzelono")); 
+	Super::BeginPlay();
+	actualAmmo = ammoAtStart;
 }
 
-void Weapon::ThrowItem()
+void UWeapon::UseItem()
 {
-	UItem::ThrowItem();
+	Super::UseItem();
+	if(actualAmmo > 0)
+	{
+		actualAmmo--;
+		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Strzelono!")); 
+
+		AActor* ParentActor = GetOwner()->GetAttachParentActor();
+		if (ParentActor)
+		{
+			FVector ForwardVector = ParentActor->GetActorForwardVector();
+			FVector SpawnLocation = GetOwner()->GetActorLocation() + (ForwardVector * 90); //pozniej zmienic to na ignora, bo wciaz nie jest idealnie
+			FRotator SpawnRotation = ParentActor->GetActorRotation();
+
+			AStaticMeshActor* Bullet = GetWorld()->SpawnActor<AStaticMeshActor>(bulletBlueprint, SpawnLocation, SpawnRotation);
+		}
+	}
+}
+
+void UWeapon::ThrowItem()
+{
+	Super::ThrowItem();
 }

@@ -10,14 +10,14 @@ UItemSlotComponent::UItemSlotComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	//PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true;
 	
 }
 
 // Called when the game starts
 void UItemSlotComponent::BeginPlay()
 {
-	//Super::BeginPlay();
+	Super::BeginPlay();
 	
 }
 
@@ -25,14 +25,14 @@ void UItemSlotComponent::BeginPlay()
 // Called every frame
 void UItemSlotComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	//Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
 }
 
 void UItemSlotComponent::CheckItemsInArea(int area)
 {
 	
-	/*FVector Location = GetOwner()->GetActorLocation();
+	FVector Location = GetOwner()->GetActorLocation();
 
 	TArray<FOverlapResult> OverlapResults;
 	FCollisionQueryParams QueryParams;
@@ -65,17 +65,64 @@ void UItemSlotComponent::CheckItemsInArea(int area)
 				if (ItemPickupComponent)
 				{
 					// Znaleziono aktora z komponentem UItemPickup - wykonaj odpowiednie działanie
-					GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, *Actor->GetName());
-					//PickupItem(Actor);
+					PickupItem(Actor);
 				}
 			}
 		}
 
-	}*/
+	}
 }
 
-/*void UItemSlotComponent::PickupItem(AActor* actor)
+void UItemSlotComponent::PickupItem(AActor* PickupActor)
 {
+	USkeletalMeshComponent* MyMeshComponent = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
 	
-}*/
+	if (actuallItem == nullptr && PickupActor != nullptr)
+	{
+		UItemPickup* ItemPickup = Cast<UItemPickup>(PickupActor->GetComponentByClass(UItemPickup::StaticClass()));
+        
+		if (ItemPickup != nullptr && ItemPickup->PrefabBlueprint != nullptr)
+		{
+			// Ustalenie lokalizacji i rotacji gdzie broń powinna zostać zinstancjonowana
+			// Załóżmy, że "ItemSocket" jest nazwą gniazda na postaci, gdzie ma zostać zainstancjonowana broń
+			const FTransform SocketTransform = MyMeshComponent->GetSocketTransform(TEXT("ItemSocket"), RTS_World);
+            
+			UWorld* World = GetWorld();
+			if (World != nullptr)
+			{
+				FActorSpawnParameters SpawnParams;
+				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+				//SpawnParams.AddIgnoredActor(ActorToIgnore);
+				
+				// Stwórz broń i przyłącz do gniazda na postaci
+				AActor* SpawnedWeapon = World->SpawnActor<AActor>(
+					ItemPickup->PrefabBlueprint, 
+					SocketTransform.GetLocation(), 
+					SocketTransform.GetRotation().Rotator(), 
+					SpawnParams
+				);
+
+				if (SpawnedWeapon != nullptr)
+				{
+					FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
+					SpawnedWeapon->AttachToComponent(MyMeshComponent, AttachmentRules, TEXT("ItemSocket"));
+                    
+					actuallItem = SpawnedWeapon; // Zapisujemy zinstancjonowaną broń jako aktualny przedmiot
+				}
+			}
+		}
+        
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Picked up: %s"), *PickupActor->GetName()));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Item slot is already in use or actor is null."));
+	}
+}
+
+void UItemSlotComponent::ClearItemSlot()
+{
+	actuallItem = nullptr;
+}
+
 
