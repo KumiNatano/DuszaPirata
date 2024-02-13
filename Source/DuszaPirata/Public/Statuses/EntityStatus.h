@@ -56,20 +56,20 @@ protected:
 	 * Called when actor was assigned to status.
 	 * @param Actor an actor that was assigned.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="Events")
+	UFUNCTION(BlueprintNativeEvent, Category="Events")
 	void ActorAssigned(AActor* Actor);
 	
 	/**
 	 * Called before status starts its work.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="Events")
+	UFUNCTION(BlueprintNativeEvent, Category="Events")
 	void Started();
 
 	/**
 	 * Called each tick of status.
 	 * @param DeltaTime time that has passed since last tick.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="Events")
+	UFUNCTION(BlueprintNativeEvent, Category="Events")
 	void Ticked(float DeltaTime);
 
 	/**
@@ -77,20 +77,55 @@ protected:
 	 * @param OldLifespan lifespan of a status before lifespan extension
 	 * @param NewLifespan lifespan of a status after lifespan extension
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="Events")
+	UFUNCTION(BlueprintNativeEvent, Category="Events")
 	void LifespanExtended(float OldLifespan, float NewLifespan);
 
 	/**
 	 * Called before interruption of work.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="Events")
+	UFUNCTION(BlueprintNativeEvent, Category="Events")
 	void Interrupted();
 
 	/**
 	 * Called before status stops its work.
 	 */
-	UFUNCTION(BlueprintImplementableEvent, Category="Events")
+	UFUNCTION(BlueprintNativeEvent, Category="Events")
 	void Ended();
+
+	
+	/**
+	 * Called when actor was assigned to status.
+	 * @param Actor an actor that was assigned.
+	 */
+	virtual void ActorAssigned_Implementation(AActor* Actor);
+	
+	/**
+	 * Called before status starts its work.
+	 */
+	virtual void Started_Implementation();
+	
+	/**
+	 * Called each tick of status.
+	 * @param DeltaTime time that has passed since last tick.
+	 */
+	virtual void Ticked_Implementation(float DeltaTime);
+	
+	/**
+	 * Called when lifespan of status was extended.
+	 * @param OldLifespan lifespan of a status before lifespan extension
+	 * @param NewLifespan lifespan of a status after lifespan extension
+	 */
+	virtual void LifespanExtended_Implementation(float OldLifespan, float NewLifespan);
+	
+	/**
+	 * Called before interruption of work.
+	 */
+	virtual void Interrupted_Implementation();
+	
+	/**
+	 * Called before status stops its work.
+	 */
+	virtual void Ended_Implementation();
 public:
 	/**
 	 * Broadcasts when actor was assigned to status.
