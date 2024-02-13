@@ -18,13 +18,31 @@ protected:
 	/**
 	 * Dictionary of active statuses.
 	 */
+	UPROPERTY()
 	TMap<TSubclassOf<UEntityStatus>, UEntityStatus*> Statuses;
+	
+	/**
+	 * Dictionary of statuses that have to be deleted from list of statuses by next tick.
+	 */
+	UPROPERTY()
+	TMap<TSubclassOf<UEntityStatus>, UEntityStatus*> ToDispose;
+
+	/**
+	 * Dictionary of timers for fixed-interval statuses.
+	 */
+	TMap<TSubclassOf<UEntityStatus>, FTimerHandle> Timers;
+
+	/**
+	 * Timer manager used for fixed ticks
+	 */
+	FTimerManager* TimerManager;
 
 	
 	/**
 	 * Snippet for status instantiation.
 	 * @param Type type of desired status.
 	 */
+	UFUNCTION()
 	UEntityStatus* CreateStatus(TSubclassOf<UEntityStatus> Type);
 
 	
@@ -32,6 +50,7 @@ protected:
 	 * Called when new status is being added and it needs setup.
 	 * @param Status new status.
 	 */
+	UFUNCTION()
 	void HandleNewAdd(UEntityStatus* Status);
 	
 	/**
@@ -39,12 +58,27 @@ protected:
 	 * @param OriginalStatus status that already was there.
 	 * @param DuplicateStatus duplicate status of the same status type. Could be null pointer.
 	 */
+	UFUNCTION()
 	void HandleDuplicateAdd(UEntityStatus* OriginalStatus, UEntityStatus* DuplicateStatus);
 
+	/**
+	 * Called when fixed-intervally ticked status ended its work. 
+	 * @param Status status itself.
+	 */
+	UFUNCTION()
+	void HandleFixedTickableEnd(UEntityStatus* Status);
+	
+	/**
+	 * Called to handle the dispose of statuses.
+	 */
+	UFUNCTION()
+	void HandleToDispose();
+	
 	/**
 	 * Called to do tick for statuses.
 	 * @param DeltaTime tick delta time.
 	 */
+	UFUNCTION()
 	void HandleTicks(float DeltaTime);
 
 	

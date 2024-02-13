@@ -219,6 +219,12 @@ public:
 	/**
 	 * Do not call this directly!
 	 * Only status manager should call this function.
+	 */
+	void Tick();
+	
+	/**
+	 * Do not call this directly!
+	 * Only status manager should call this function.
 	 * @param DeltaTime time that has passed since last tick.
 	 */
 	void Tick(float DeltaTime);

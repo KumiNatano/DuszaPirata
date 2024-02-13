@@ -13,16 +13,69 @@ void UEntityStatusManager::HandleNewAdd(UEntityStatus* Status)
 	Statuses.Add(type, Status);
 	Status->AssignActor(GetOwner());
 	Status->Activate();
+	// Start ticking process for fixed-interval ticked statuses
+	if (Status->TickType == EEntityStatusTickType::Fixed)
+	{
+		FTimerHandle handle;
+		float tickrate = Status->TickDuration;
+		Status->OnEnd.AddDynamic(this, &UEntityStatusManager::HandleFixedTickableEnd);
+		TimerManager->SetTimer(handle, Status, &UEntityStatus::Tick, tickrate, true, tickrate);
+		Timers.Add(type, handle);
+	}
 }
 
 void UEntityStatusManager::HandleDuplicateAdd(UEntityStatus* OriginalStatus, UEntityStatus* DuplicateStatus)
 {
-	float extendTime = DuplicateStatus != nullptr? DuplicateStatus->Lifespan : OriginalStatus->Lifespan;
-	OriginalStatus->ExtendLifespan(extendTime);
+	if (!OriginalStatus->IsBusy)
+	{
+		UClass* type = OriginalStatus->GetClass();
+		Statuses[type] = DuplicateStatus;
+		// TODO: If status is fixed-intervaled, then stop timer for original status and set a new one for new status. At the moment I'm too lazy to implement that
+	}
+	else
+	{
+		float extendTime = DuplicateStatus != nullptr? DuplicateStatus->Lifespan : OriginalStatus->Lifespan;
+		OriginalStatus->ExtendLifespan(extendTime);
+	}
 }
+
+void UEntityStatusManager::HandleFixedTickableEnd(UEntityStatus* Status)
+{
+	UClass* type = Status->GetClass();
+
+	if (Timers.Contains(type))
+	{
+		TimerManager->ClearTimer(Timers[type]);
+		ToDispose.Add(type, Status);
+	}
+}
+
+void UEntityStatusManager::HandleToDispose()
+{
+	for (auto iterator = ToDispose.CreateIterator(); iterator; ++iterator)
+	{
+		TSubclassOf<UEntityStatus> type = iterator.Key();
+
+		if (Statuses.Contains(type))
+		{
+			UEntityStatus* disposeStatus = iterator.Value();
+			UEntityStatus* currentStatus = Statuses[type];
+			
+			if (disposeStatus && currentStatus == disposeStatus)
+			{
+				Statuses.Remove(type);
+			}
+		}
+
+		iterator.RemoveCurrent();
+	}
+}
+
 
 void UEntityStatusManager::HandleTicks(float DeltaTime)
 {
+	HandleToDispose();
+	
 	for (auto iterator = Statuses.CreateIterator(); iterator; ++iterator)
 	{
 		UEntityStatus* status = iterator.Value();
@@ -65,7 +118,7 @@ UEntityStatus* UEntityStatusManager::AddStatus(UEntityStatus* Status)
 			result = Statuses[type];
 			if (result != nullptr)
 			{
-				HandleDuplicateAdd(result, nullptr);
+				HandleDuplicateAdd(result, Status);
 			}
 			else
 			{
@@ -147,11 +200,15 @@ bool UEntityStatusManager::HasStatus(UEntityStatus* Status)
 UEntityStatusManager::UEntityStatusManager()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+
+	TimerManager = nullptr;
 }
 
 void UEntityStatusManager::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	TimerManager = &GetWorld()->GetTimerManager();
 }
 
 void UEntityStatusManager::TickComponent(float DeltaTime, ELevelTick TickType,
