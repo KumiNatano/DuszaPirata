@@ -61,7 +61,7 @@ void UEntityStatus::Tick(float DeltaTime)
 	if (IsBusy)
 	{
 		CurrentTime += DeltaTime;
-		if (CurrentTime >= CurrentLifespan)
+		if (CurrentTime > CurrentLifespan)
 		{
 			CurrentTime = CurrentLifespan;
 			
@@ -81,4 +81,9 @@ void UEntityStatus::Tick(float DeltaTime)
 			OnTick.Broadcast(this, DeltaTime);
 		}
 	}
+}
+
+void UEntityStatus::Tick()
+{
+	Tick(TickDuration);
 }
