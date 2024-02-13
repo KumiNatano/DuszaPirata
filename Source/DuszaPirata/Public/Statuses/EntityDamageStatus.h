@@ -10,7 +10,7 @@ UENUM(BlueprintType)
 enum EEntityStatusTickDamageType
 {
 	Relative,  // Damage is given relative to delta time, lifespan of status and total damage.
-	Constant   // Invoke tick event every x seconds
+	Constant   // Constant amount of damage given each tick.
 };
 
 UCLASS()
