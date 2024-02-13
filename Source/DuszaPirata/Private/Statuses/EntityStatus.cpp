@@ -87,3 +87,11 @@ void UEntityStatus::Tick()
 {
 	Tick(TickDuration);
 }
+
+
+void UEntityStatus::ActorAssigned_Implementation(AActor* Actor) { }
+void UEntityStatus::Started_Implementation() { }
+void UEntityStatus::Ticked_Implementation(float DeltaTime) { }
+void UEntityStatus::LifespanExtended_Implementation(float OldLifespan, float NewLifespan) { }
+void UEntityStatus::Interrupted_Implementation() { }
+void UEntityStatus::Ended_Implementation() { }
