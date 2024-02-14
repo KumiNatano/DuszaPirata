@@ -28,4 +28,7 @@ public:
 	UFUNCTION()
 	void HandleDeath(AActor* DamagedActor, float Damage,
 		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	UFUNCTION()
+	void SetRagdoll(bool value);
 };

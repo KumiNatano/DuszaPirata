@@ -43,17 +43,32 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AEnemy::HandleDeath(AActor* DamagedActor, float Damage,
 		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-	//this->FindComponentByClass<
-	USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>();
-	if(SkeletalMesh)
+	this->SetRagdoll(true);
+}
+
+void AEnemy::SetRagdoll(bool value)
+{
+	if(value)
 	{
-		SkeletalMesh->SetSimulatePhysics(true);
+		if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
+		{
+			SkeletalMesh->SetSimulatePhysics(true);
+		}
+		if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
+		{
+			CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
 	}
-	
-	UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent();
-	if(CapsuleComp)
-	{
-		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
+	//else
+	//{
+	//	if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
+	//	{
+	//		SkeletalMesh->SetSimulatePhysics(true);
+	//	}
+	//	if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
+	//	{
+	//		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	//	}
+	//}
 }
 

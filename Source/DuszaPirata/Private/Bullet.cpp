@@ -72,7 +72,6 @@ void UBullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			if(!TargetRoot) {return;}
 			TargetRoot->AddImpulseAtLocation(DamageCauser ->GetActorForwardVector() * 70000.f,
 				TargetRoot->GetComponentTransform().TransformPosition(DamageCauser->GetActorLocation()));
-			GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Red, TEXT("Dzięki, działa"));
 		}
 	}
 

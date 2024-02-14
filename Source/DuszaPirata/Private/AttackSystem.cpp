@@ -3,6 +3,9 @@
 
 #include "AttackSystem.h"
 
+#include "Enemy.h"
+#include "Components/CapsuleComponent.h"
+
 // Sets default values for this component's properties
 UAttackSystem::UAttackSystem()
 {
@@ -59,14 +62,32 @@ void UAttackSystem::Kicking()
 		for (const FOverlapResult& OverlapResult : Overlaps)
 		{
 			AActor* HitActor = OverlapResult.GetActor();
-			if (USceneComponent* RootComponent = HitActor->GetRootComponent())
+			// hit Enemy
+			if (AEnemy* Enemy = Cast<AEnemy>(HitActor))
+			{
+				Enemy->SetRagdoll(true);
+				UPrimitiveComponent* EnemyRoot;
+				if(ACharacter* Character = Cast<ACharacter>(Enemy))
+				{
+					EnemyRoot = Character->GetMesh();
+				}
+				else
+				{
+					EnemyRoot = Cast<UPrimitiveComponent>(Enemy);
+				}
+				if(EnemyRoot)
+				{
+					EnemyRoot->AddImpulseAtLocation(GetOwner() ->GetActorForwardVector() * Strength/4,
+						EnemyRoot->GetComponentTransform().TransformPosition(GetOwner()->GetActorLocation()));
+				}
+			}
+			// if hit Object other than Enemy
+			else if (USceneComponent* RootComponent = HitActor->GetRootComponent())
 			{
 				UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(RootComponent);
 				if (PrimitiveComponent && PrimitiveComponent->IsSimulatingPhysics())
 				{
-					FVector PlayerForwardVector = GetOwner()->GetActorForwardVector();
-					FVector PlayerUpVector = GetOwner()->GetActorUpVector() * 10.f;
-					PrimitiveComponent->AddImpulse(PlayerForwardVector * Strength + PlayerUpVector);
+					PrimitiveComponent->AddImpulse(GetOwner()->GetActorForwardVector() * Strength + GetOwner()->GetActorUpVector()*10.f);
 				}
 			}
 		}
