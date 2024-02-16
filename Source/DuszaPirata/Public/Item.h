@@ -23,6 +23,10 @@ public:
 	float ThrowDamage = 10;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
 	float ThrowForce = 500;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Config")
+	FVector upVector = FVector(0.0f, 0.0f, 0.3f);
+
+	bool didItHit = false;
 	
 	virtual void UseItem();
 	virtual void ThrowItem();
@@ -35,7 +39,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+
 	UFUNCTION()
-    void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnComponentHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };

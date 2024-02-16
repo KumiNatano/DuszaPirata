@@ -56,16 +56,18 @@ void UItemSlotComponent::CheckItemsInArea(int area)
 	{
 		for (const FOverlapResult& Result : OverlapResults)
 		{
-			AActor* Actor = Result.GetActor();
-			if (Actor)
+			AActor* pickupObject = Result.GetActor();
+			if (pickupObject)
 			{
 				// Sprawdź, czy aktor posiada komponent UItemPickup
-				UItemPickup* ItemPickupComponent = Cast<UItemPickup>(Actor->GetComponentByClass(UItemPickup::StaticClass()));
+				UItemPickup* ItemPickupComponent = Cast<UItemPickup>(pickupObject->GetComponentByClass(UItemPickup::StaticClass()));
 
 				if (ItemPickupComponent)
 				{
 					// Znaleziono aktora z komponentem UItemPickup - wykonaj odpowiednie działanie
-					PickupItem(Actor);
+					PickupItem(pickupObject);
+					pickupObject->Destroy();
+					break;
 				}
 			}
 		}

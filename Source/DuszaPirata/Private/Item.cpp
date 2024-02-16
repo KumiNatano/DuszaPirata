@@ -16,18 +16,17 @@ UItem::UItem()
 
 void UItem::UseItem()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Uzyto itemu")); 
+	
 }
 
 void UItem::ThrowItem()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Rzucono item i zadano " + FString::SanitizeFloat(ThrowDamage) + " obrazen"));
-
 	// Uzyskaj komponent mesh przedmiotu (zakładamy, że jest to StaticMeshComponent)
 	UStaticMeshComponent* MeshComp = Cast<UStaticMeshComponent>(GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass()));
 	if (MeshComp)
 	{
-		FVector ThrowDirection = GetOwner()->GetAttachParentActor()->GetActorForwardVector() + FVector(0.0f, 0.0f, 0.3f); // Dodaj trochę w górę, aby stworzyć łuk rzutu
+		MeshComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Block);
+		FVector ThrowDirection = GetOwner()->GetAttachParentActor()->GetActorForwardVector() + upVector; // Dodaj trochę w górę, aby stworzyć łuk rzutu
 		ThrowDirection.Normalize();
 		MeshComp->SetSimulatePhysics(true);
 		MeshComp->AddImpulse(ThrowDirection * ThrowForce, NAME_None, true);
@@ -45,14 +44,14 @@ void UItem::BeginPlay()
 	if (OwnerMeshComp)
 	{
 		// Jeśli komponent istnieje, dodaj delegata
-		OwnerMeshComp->OnComponentBeginOverlap.AddDynamic(this, &UItem::OnOverlapBegin);
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("JEST")); 
+		OwnerMeshComp->OnComponentHit.AddDynamic(this, &UItem::OnComponentHit);
 	}
 	else
 	{
 		// Jeśli komponent nie istnieje, wyświetl błąd debugowania
 		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Komponent nie znaleziony"));
 	}
+
 }
 
 
@@ -70,19 +69,18 @@ void UItem::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentT
 	}*/
 }
 
-void UItem::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void UItem::OnComponentHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	FVector NormalImpulse, const FHitResult& Hit)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("zbudowali maszyny")); 
-	
-	/*UHealthSystem* HealthComponent = OtherActor->FindComponentByClass<UHealthSystem>();
-	if (HealthComponent)
+	UHealthSystem* otherHealthSystem = OtherActor->FindComponentByClass<UHealthSystem>();
+	if(otherHealthSystem && !didItHit)
 	{
 		AActor* DamagedActor = OtherActor;
-		float DamageAmount = ThrowDamage;
 		const UDamageType* DamageType = nullptr;
 		AController* InstigatedBy = nullptr;
 		AActor* DamageCauser = GetOwner();
-		HealthComponent->TakeDamage(DamagedActor, DamageAmount, DamageType, InstigatedBy, DamageCauser);
-	}*/
+		otherHealthSystem->TakeDamage(DamagedActor, ThrowDamage, DamageType, InstigatedBy, DamageCauser);
+		didItHit = true;
+	}
 }
 
