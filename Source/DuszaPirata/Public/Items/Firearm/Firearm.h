@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "Items/Item.h"
 #include "Engine/StaticMeshActor.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "Firearm.generated.h"
 
 
@@ -25,7 +27,12 @@ public:
 	int actualAmmo;
 
 	void BeginPlay() override;
+
+	
+	UPROPERTY(EditAnywhere, Category = "Smoke")
+	TArray<UNiagaraSystem*> smokeEffects;
 	
 	virtual void UseItem() override;
+	void SpawnSmokeEffects(FVector SpawnLocation);
 	virtual void ThrowItem() override;
 };

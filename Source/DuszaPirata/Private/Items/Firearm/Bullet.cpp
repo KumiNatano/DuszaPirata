@@ -48,7 +48,7 @@ void UBullet::DestroyBulletObject()
 void UBullet::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UHealthSystem* HealthComponent = OtherActor->FindComponentByClass<UHealthSystem>();
-	if (HealthComponent)
+	if (HealthComponent && !OtherActor->ActorHasTag("player"))
 	{
 		AActor* DamagedActor = OtherActor;
 		float DamageAmount = DamageToDeal;
