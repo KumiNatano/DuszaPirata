@@ -1,7 +1,7 @@
 
 
 
-#include "ItemSlotComponent.h"
+#include "Items/ItemSlotComponent.h"
 
 //#include "ItemPickup.h"
 
@@ -113,8 +113,6 @@ void UItemSlotComponent::PickupItem(AActor* PickupActor)
 				}
 			}
 		}
-        
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString::Printf(TEXT("Picked up: %s"), *PickupActor->GetName()));
 	}
 	else
 	{

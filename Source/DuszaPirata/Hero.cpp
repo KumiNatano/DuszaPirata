@@ -13,8 +13,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "HealthSystem.h"
 #include "InputActionValue.h"
-#include "Item.h"
-#include "ItemSlotComponent.h"
+#include "Items/Item.h"
+#include "Items/ItemSlotComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 

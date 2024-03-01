@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Item.h"
+#include "Items/Item.h"
 #include "Engine/StaticMeshActor.h"
-#include "Weapon.generated.h"
+#include "Firearm.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

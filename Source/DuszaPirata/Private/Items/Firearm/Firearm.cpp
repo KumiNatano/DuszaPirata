@@ -1,4 +1,4 @@
-#include "Weapon.h"
+#include "Items/Firearm/Firearm.h"
 
 UWeapon::UWeapon()
 {
@@ -22,7 +22,6 @@ void UWeapon::UseItem()
 	if(actualAmmo > 0)
 	{
 		actualAmmo--;
-		GEngine->AddOnScreenDebugMessage(-1, 60.f, FColor::Red, TEXT("Strzelono!")); 
 
 		AActor* ParentActor = GetOwner()->GetAttachParentActor();
 		if (ParentActor)

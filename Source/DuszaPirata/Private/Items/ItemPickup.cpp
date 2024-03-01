@@ -1,7 +1,7 @@
 
 
 
-#include "ItemPickup.h"
+#include "Items/ItemPickup.h"
 
 // Sets default values for this component's properties
 UItemPickup::UItemPickup()
