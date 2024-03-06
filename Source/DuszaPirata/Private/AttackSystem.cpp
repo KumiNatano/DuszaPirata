@@ -70,15 +70,11 @@ void UAttackSystem::Kicking()
 				if(ACharacter* Character = Cast<ACharacter>(Enemy))
 				{
 					EnemyRoot = Character->GetMesh();
-				}
-				else
-				{
-					EnemyRoot = Cast<UPrimitiveComponent>(Enemy);
-				}
-				if(EnemyRoot)
-				{
-					EnemyRoot->AddImpulseAtLocation(GetOwner() ->GetActorForwardVector() * Strength/4,
-						EnemyRoot->GetComponentTransform().TransformPosition(GetOwner()->GetActorLocation()));
+					if(EnemyRoot)
+					{
+						EnemyRoot->AddImpulseAtLocation(GetOwner() ->GetActorForwardVector() * Strength/4,
+							EnemyRoot->GetComponentTransform().TransformPosition(GetOwner()->GetActorLocation()));
+					}
 				}
 			}
 			// if hit Object other than Enemy

@@ -48,6 +48,10 @@ void AEnemy::HandleDeath(AActor* DamagedActor, float Damage,
 
 void AEnemy::SetRagdoll(bool value)
 {
+	IsRagdolled = value;
+
+	
+	
 	if(value)
 	{
 		if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
@@ -58,17 +62,18 @@ void AEnemy::SetRagdoll(bool value)
 		{
 			CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		}
+		
 	}
-	//else
-	//{
-	//	if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
-	//	{
-	//		SkeletalMesh->SetSimulatePhysics(true);
-	//	}
-	//	if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
-	//	{
-	//		CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	//	}
-	//}
+	else
+	{
+		if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
+		{
+			SkeletalMesh->SetSimulatePhysics(false);
+		}
+		if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
+		{
+			CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		}
+	}
 }
 

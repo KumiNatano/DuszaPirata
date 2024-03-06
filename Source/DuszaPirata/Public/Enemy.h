@@ -14,6 +14,10 @@ class DUSZAPIRATA_API AEnemy : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemy();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IsRagdolled")
+	bool IsRagdolled;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
