@@ -44,6 +44,7 @@ void AEnemy::HandleDeath(AActor* DamagedActor, float Damage,
 		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
 	this->SetRagdoll(true);
+	//if(Con)
 }
 
 void AEnemy::SetRagdoll(bool value)
