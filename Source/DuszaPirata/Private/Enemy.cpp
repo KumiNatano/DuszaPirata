@@ -50,31 +50,34 @@ void AEnemy::HandleDeath(AActor* DamagedActor, float Damage,
 void AEnemy::SetRagdoll(bool value)
 {
 	IsRagdolled = value;
+	if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>()) {
+		if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
+		{
+			if(value)
+			{
+				SkeletalMesh->SetSimulatePhysics(true);
+				CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			}
+			else
+			{
+				CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
-	
-	
-	if(value)
-	{
-		if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
-		{
-			SkeletalMesh->SetSimulatePhysics(true);
-		}
-		if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
-		{
-			CapsuleComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		}
-		
-	}
-	else
-	{
-		if(USkeletalMeshComponent* SkeletalMesh = this->FindComponentByClass<USkeletalMeshComponent>())
-		{
-			SkeletalMesh->SetSimulatePhysics(false);
-		}
-		if(UCapsuleComponent* CapsuleComp = this->GetCapsuleComponent())
-		{
-			CapsuleComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+				SkeletalMesh->SetCollisionObjectType(ECollisionChannel::ECC_Pawn);
+				SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+				SkeletalMesh->SetSimulatePhysics(false);
+				FVector WorldMeshLocation = SkeletalMesh->GetComponentLocation();
+				CapsuleComp->SetWorldLocation(WorldMeshLocation);
+
+				SkeletalMesh->AttachToComponent(CapsuleComp, FAttachmentTransformRules(
+					EAttachmentRule::SnapToTarget,
+					EAttachmentRule::KeepRelative,
+					EAttachmentRule::KeepRelative,
+					true));
+				SkeletalMesh->SetRelativeLocation_Direct(FVector(0, 0, -85));
+				SkeletalMesh->SetRelativeRotation_Direct(FRotator(0, -90, 0));
+			}
 		}
 	}
+	
 }
 

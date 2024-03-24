@@ -33,6 +33,6 @@ public:
 	void HandleDeath(AActor* DamagedActor, float Damage,
 		const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetRagdoll(bool value);
 };
