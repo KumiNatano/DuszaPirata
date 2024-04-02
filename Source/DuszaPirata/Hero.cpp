@@ -206,11 +206,7 @@ void AHero::Shoot(const FInputActionValue& Value)
 
 	if (ItemSlotComponent)
 	{
-		if(ItemSlotComponent->actuallItem == nullptr)
-		{
-			ItemSlotComponent->CheckItemsInArea(200);
-		}
-		else
+		if(ItemSlotComponent->actuallItem != nullptr)
 		{
 			UItem* ourItem = Cast<UItem>(ItemSlotComponent->actuallItem->GetComponentByClass(UItem::StaticClass()));
 			ourItem->UseItem();

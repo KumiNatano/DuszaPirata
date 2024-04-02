@@ -25,6 +25,11 @@ void UItemSlotComponent::BeginPlay()
 // Called every frame
 void UItemSlotComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	if(actuallItem == nullptr)
+	{
+		CheckItemsInArea(200);
+	}
+	
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
 }
