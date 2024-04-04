@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "MusketSystem.h"
 #include "Hero.generated.h"
 
 
@@ -64,6 +63,10 @@ class AHero : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShootAction;
 
+	/** Throwning Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ThrowAction;
+
 public:
 	AHero();
 	virtual void Jump() override;
@@ -91,6 +94,8 @@ protected:
 	void AttackBasic(const FInputActionValue& Value);
 	
 	void Shoot(const FInputActionValue& Value);
+
+	void Throw(const FInputActionValue& Value);
 
 protected:
 	// APawn interface

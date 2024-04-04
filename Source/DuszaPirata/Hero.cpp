@@ -13,6 +13,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "HealthSystem.h"
 #include "InputActionValue.h"
+#include "Items/Item.h"
+#include "Items/ItemSlotComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -114,6 +116,9 @@ void AHero::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 		// Shooting
 		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AHero::Shoot);
+
+		// Throwing
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Started, this, &AHero::Throw);
 	}
 	else
 	{
@@ -198,10 +203,35 @@ void AHero::AttackBasic(const FInputActionValue& Value)
 
 void AHero::Shoot(const FInputActionValue& Value)
 {
-	UMusketSystem* MusketSystem = Cast<UMusketSystem>(this->GetComponentByClass(UMusketSystem::StaticClass()));
+	UItemSlotComponent* ItemSlotComponent = Cast<UItemSlotComponent>(this->GetComponentByClass(UItemSlotComponent::StaticClass()));
 
-	if (MusketSystem)
+	if (ItemSlotComponent)
 	{
-		MusketSystem->Shoot();
+		if(ItemSlotComponent->actuallItem != nullptr)
+		{
+			UItem* ourItem = Cast<UItem>(ItemSlotComponent->actuallItem->GetComponentByClass(UItem::StaticClass()));
+			ourItem->UseItem();
+		}
+
+	}
+}
+
+void AHero::Throw(const FInputActionValue& Value)
+{
+	UItemSlotComponent* ItemSlotComponent = Cast<UItemSlotComponent>(this->GetComponentByClass(UItemSlotComponent::StaticClass()));
+
+	if (ItemSlotComponent)
+	{
+		if(ItemSlotComponent->actuallItem == nullptr)
+		{
+			
+		}
+		else
+		{
+			UItem* ourItem = Cast<UItem>(ItemSlotComponent->actuallItem->GetComponentByClass(UItem::StaticClass()));
+			ourItem->ThrowItem();
+			ItemSlotComponent->ClearItemSlot();
+		}
+
 	}
 }
